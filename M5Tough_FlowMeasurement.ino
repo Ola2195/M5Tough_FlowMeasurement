@@ -62,13 +62,15 @@ void reset() {
   memset(samples, 0, sizeof(samples));
   firstSequence = true;
   firstMeasurement = true;
-
+  avgFrequency = 0;
   sampleIndex = 0;
   frequency = 0.0;
+  
 
   portENTER_CRITICAL_ISR(&interruptMux);  // Zabezpieczenie współdzielonych zmiennych
   timeCount = 0;
   pulseCount = 0;
+  lastPulseCount = 0;
   measurementFlag = false;
   portEXIT_CRITICAL_ISR(&interruptMux);
 
