@@ -1,42 +1,46 @@
 # M5Tough_FlowMeasurement
 
-M5Tough_FlowMeasurement is a project based on the M5Stack TOUGH ESP32 microcontroller that allows for measuring liquid flow using a flow sensor. The measurement results are displayed on the device's screen in real-time.
+M5Tough_FlowMeasurement is a project based on the M5Stack TOUGH ESP32 microcontroller designed to measure liquid flow using a flow sensor. The measured results are displayed in real-time on the device's screen.
 
 ## Description
 
-This project uses a liquid flow sensor to monitor and display the flow rate in liters per minute (L/min). The results are updated every second and presented on the M5Tough's display. The code utilizes the ESP32 microcontroller's internal timers and interrupts to ensure accurate and reliable measurements.
+This project utilizes a liquid flow sensor connected to the M5Stack TOUGH ESP32 microcontroller to monitor and display the flow rate in Hertz (Hz).
+The code leverages interrupts and timers of the ESP32 for accurate pulse counting from the flow sensor, ensuring precise measurement results.
+The timer is configured with a precision of 100 milliseconds (ms).
+Measurements are averaged over the last 10 samples to smooth out fluctuations in the flow rate. Initially, the average is calculated progressively as more samples are collected to stabilize the readings.
+The screen displays the flow rate both as an averaged value and as an instant measurement.
+A reset button on the screen allows the user to reset all counters and measurements.
+
+GPIO interrupt handling was tested up to 100 kHz; at 101 kHz, signal integrity issues were observed.
 
 ## Features
 
-- Real-time liquid flow measurement
-- Utilizing ESP32 interrupts and timers for precise pulse counting from the flow sensor
-- Automatic conversion of pulses to flow units (L/min)
-- Displaying results on the M5Tough screen
+- Real-time monitoring of liquid flow rate
+- Utilization of ESP32 interrupts and timers for precise pulse counting from the flow sensor
+- Averaging of flow measurements over the last 10 samples to reduce noise
+- Displaying flow rate in Hertz (Hz) on the M5Stack TOUGH screen
+- Reset button for resetting all counters and measurements
 
 ## Hardware Requirements
 
-- M5Stack TOUGH ESP32
+- M5Stack TOUGH ESP32 microcontroller
 - Flow sensor with pulse output
 - Connecting wires
 
 ## Installation
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/yourusername/M5Tough_FlowMeasurement.git
-    ```
-2. Open the project in Arduino IDE.
-3. Ensure you have the following libraries installed:
+1. Open the project in Arduino IDE.
+2. Ensure you have the following libraries installed:
     - M5Unified
     - Arduino.h (ESP32 core)
-4. Configure the appropriate board settings in the Arduino IDE for M5Stack TOUGH ESP32.
-5. Upload the code to the M5Stack TOUGH ESP32 device.
+3. Configure the appropriate board settings in the Arduino IDE for M5Stack TOUGH ESP32.
+4. Upload the code to the M5Stack TOUGH ESP32 device.
 
 ## Usage
 
-1. Connect the flow sensor to pin 36 on the M5Tough or change the GPIO pin number in line 8 in the M5Tough file.
+1. Connect the flow sensor to pin 2 on the M5Tough or change the GPIO pin number in line 8 in the M5Tough file.
 ```cpp
-const int sensorPin = 36;  // Pin connected to the flow sensor
+const int sensorPin = 2;  // Pin connected to the flow sensor
 ```
 2. Power on the device.
-3. The flow rate will be displayed on the M5Tough screen in real-time.
+3. The flow rate will be displayed on the M5Stack TOUGH screen in real-time. The displayed values include the averaged flow rate and the instantaneous measurement.
