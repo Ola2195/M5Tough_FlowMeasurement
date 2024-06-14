@@ -149,16 +149,16 @@ void loop() {
   M5.Lcd.println(buffer);
 
   M5.Lcd.setTextSize(3);
-  snprintf(buffer, sizeof(buffer), "A 1s  %.2f Hz", avgFrequency);
+  snprintf(buffer, sizeof(buffer), "1s  %.2f Hz", avgFrequency);
   M5.Lcd.println(buffer);
   M5.Lcd.setTextSize(2);
-  M5.Lcd.println("\nAVERAGE OF THE LAST 10");
+  M5.Lcd.println("AVERAGE OF THE LATEST\n");
 
   M5.Lcd.setTextSize(3);
-  snprintf(buffer, sizeof(buffer), "I 1s  %.2f Hz", frequency);
+  snprintf(buffer, sizeof(buffer), "1s  %.2f Hz", frequency);
   M5.Lcd.println(buffer);
   M5.Lcd.setTextSize(2);
-  M5.Lcd.println("\nINSTANT MEASUREMENT");
+  M5.Lcd.println("INSTANT MEASUREMENT\N");
 
   // Sprawdzenie dotknięcia ekranu
   M5.update();
