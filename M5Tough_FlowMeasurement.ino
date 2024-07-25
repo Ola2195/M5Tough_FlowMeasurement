@@ -4,35 +4,51 @@
 #define DISPLAY_WIDTH 320
 #define DISPLAY_HEIGH 240
 
-#define SENSOR_PIN    2  // Pin z przepływomierzem
+#define NUM_SENSORS   2   // Liczba przepływomierzy
 #define SUMPLES_SIZE  10  // Liczba próbek do uśredniania
 
-hw_timer_t *timer = NULL;
-const int sensortPin = SENSOR_PIN;
-portMUX_TYPE interruptMux = portMUX_INITIALIZER_UNLOCKED;
+#define SENSOR_PIN_1    2   // Pin z przepływomierzem
+#define SENSOR_PIN_2    36  // Pin z przepływomierzem
 
+
+// Definicje timera i zmiennych synchronizacyjnych
+hw_timer_t *timer = NULL;
+portMUX_TYPE interruptMux = portMUX_INITIALIZER_UNLOCKED;
 volatile bool measurementFlag = false;
 volatile int timeCount = 0;
-volatile int pulseCount = 0;
-volatile int lastPulseCount = 0;
-volatile float frequency = 0.0;
 
-// Parametry filtra
-float samples[SUMPLES_SIZE] = { 0 };
-volatile int sampleIndex = 0;
-volatile float avgFrequency = 0.0;
-volatile bool firstMeasurement = true;
-volatile bool firstSequence = true;
+// Struktura przechowująca dane przepływomierza
+struct FlowSensor {
+  int pin;
+  volatile int pulseCount;
+  volatile int lastPulseCount;
+  volatile float frequency;
+
+  float samples[SUMPLES_SIZE];
+  volatile int sampleIndex;
+  volatile float avgFrequency;
+  volatile bool firstMeasurement;
+  volatile bool firstSequence;
+};
+
+// Tablica przepływomierzy
+FlowSensor sensors[NUM_SENSORS] = {
+  { SENSOR_PIN_1, 0, 0, 0.0, {0}, 0, 0.0, true, true },
+  { SENSOR_PIN_2, 0, 0, 0.0, {0}, 0, 0.0, true, true }
+};
+
 
 /*
  * Funkcja przerwania timera
  */
 void IRAM_ATTR onTimer() {
-  portENTER_CRITICAL_ISR(&interruptMux);  // zabezpieczenie współdzielonych zmiennych
+  portENTER_CRITICAL_ISR(&interruptMux);  // Zabezpieczenie współdzielonych zmiennych
   timeCount++;
   if (timeCount == 10) {
-    lastPulseCount = pulseCount;
-    pulseCount = 0;
+    for (int i = 0; i < NUM_SENSORS; i++) {
+      sensors[i].lastPulseCount = sensors[i].pulseCount;
+      sensors[i].pulseCount = 0;
+    }
     timeCount = 0;
     measurementFlag = true;
   }
@@ -40,11 +56,17 @@ void IRAM_ATTR onTimer() {
 }
 
 /*
- * Funkcja przerwania GPIO
+ * Funkcje przerwań GPIO
  */
-void IRAM_ATTR pulseCounter() {
+void IRAM_ATTR pulseCounter0() {
   portENTER_CRITICAL_ISR(&interruptMux);  // Zabezpieczenie współdzielonych zmiennych
-  pulseCount++;
+  sensors[0].pulseCount++;
+  portEXIT_CRITICAL_ISR(&interruptMux);
+}
+
+void IRAM_ATTR pulseCounter1() {
+  portENTER_CRITICAL_ISR(&interruptMux);  // Zabezpieczenie współdzielonych zmiennych
+  sensors[1].pulseCount++;
   portEXIT_CRITICAL_ISR(&interruptMux);
 }
 
@@ -54,29 +76,35 @@ void IRAM_ATTR pulseCounter() {
 void reset() {
   // Wyłącz przerwania na czas resetu
   timerAlarmDisable(timer);
-  detachInterrupt(digitalPinToInterrupt(sensortPin));
+  for (int i = 0; i < NUM_SENSORS; i++) {
+    detachInterrupt(digitalPinToInterrupt(sensors[i].pin));
+  }
 
-  if (timeCount != 0)
+  if (timeCount != 0) {
     M5.Lcd.fillRect(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGH - 40 - 20, BLACK);
+  }
 
-  memset(samples, 0, sizeof(samples));
-  firstSequence = true;
-  firstMeasurement = true;
-  avgFrequency = 0;
-  sampleIndex = 0;
-  frequency = 0.0;
-  
+  for (int i = 0; i < NUM_SENSORS; i++) {
+    FlowSensor &sensor = sensors[i]; // Odwołanie do aktualnego przepływomierza
+    memset(sensor.samples, 0, sizeof(sensor.samples));
+    sensor.firstSequence = true;
+    sensor.firstMeasurement = true;
+    sensor.avgFrequency = 0;
+    sensor.sampleIndex = 0;
+    sensor.frequency = 0.0;
 
-  portENTER_CRITICAL_ISR(&interruptMux);  // Zabezpieczenie współdzielonych zmiennych
-  timeCount = 0;
-  pulseCount = 0;
-  lastPulseCount = 0;
-  measurementFlag = false;
-  portEXIT_CRITICAL_ISR(&interruptMux);
+    portENTER_CRITICAL_ISR(&interruptMux); // Zabezpieczenie współdzielonych zmiennych
+    timeCount = 0;
+    sensor.pulseCount = 0;
+    sensor.lastPulseCount = 0;
+    measurementFlag = false;
+    portEXIT_CRITICAL_ISR(&interruptMux);
+  }
 
   // Włącz przerwania po zakończeniu resetu
   timerAlarmEnable(timer);
-  attachInterrupt(digitalPinToInterrupt(sensortPin), pulseCounter, FALLING);
+  attachInterrupt(digitalPinToInterrupt(sensors[0].pin), pulseCounter0, FALLING);
+  attachInterrupt(digitalPinToInterrupt(sensors[1].pin), pulseCounter1, FALLING);
 }
 
 /*
@@ -84,15 +112,21 @@ void reset() {
  */
 void setup() {
   M5.begin();
+
+  Serial.begin(115200); // Inicjalizacja portu szeregowego z prędkością 115200 baud
+
   // Konfiguracja timera
   timer = timerBegin(0, 80, true);              // timer 0, preskaler 80 (dla 1MHz)
   timerAttachInterrupt(timer, &onTimer, true);  // obsługa przerwania
   timerAlarmWrite(timer, 100000, true);         // 100 ms = 100000 us
   timerAlarmEnable(timer);
 
-  // Konfiguracja GPIO
-  pinMode(sensortPin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(sensortPin), pulseCounter, FALLING);
+  // Konfiguracja GPIO dla każdego przepływomierza
+  for (int i = 0; i < NUM_SENSORS; i++) {
+    pinMode(sensors[i].pin, INPUT_PULLUP);
+  }
+  attachInterrupt(digitalPinToInterrupt(sensors[0].pin), pulseCounter0, FALLING);
+  attachInterrupt(digitalPinToInterrupt(sensors[1].pin), pulseCounter1, FALLING);
 
   // Rysowanie przycisku resetu na ekranie
   M5.Lcd.fillRect(20, DISPLAY_HEIGH - 40 - 20, DISPLAY_WIDTH - 40, 40, TFT_WHITE);
@@ -113,29 +147,37 @@ void loop() {
   if (measurementFlag) {
     portENTER_CRITICAL_ISR(&interruptMux);  // Zabezpieczenie współdzielonych zmiennych
     measurementFlag = false;
-    frequency = lastPulseCount / 1;
     portEXIT_CRITICAL_ISR(&interruptMux);
+    
+    for (int i = 0; i < NUM_SENSORS; i++) {
+      FlowSensor &sensor = sensors[i];        // Odwołanie do aktualnego przepływomierza
+      portENTER_CRITICAL_ISR(&interruptMux);  // Zabezpieczenie współdzielonych zmiennych
+      sensor.frequency = sensor.lastPulseCount / 1;
+      portEXIT_CRITICAL_ISR(&interruptMux);
+      int index = sensor.sampleIndex;
 
-    if (!firstMeasurement) {
-      // Aktualizacja próbek
-      samples[sampleIndex] = frequency;
-      if (sampleIndex + 1 == SUMPLES_SIZE)
-        firstSequence = false;
-      sampleIndex = (sampleIndex + 1) % SUMPLES_SIZE;
+      if (!sensor.firstMeasurement) {
+        // Aktualizacja próbek
+        sensor.samples[index] = sensor.frequency;
+        if (index + 1 == SUMPLES_SIZE) {
+          sensor.firstSequence = false;
+        }
+        sensor.sampleIndex = (index + 1) % SUMPLES_SIZE;
 
-      // Obliczanie średniej
-      int range = 0;
-      avgFrequency = 0;
-      if (firstSequence)
-        range = sampleIndex;
-      else
-        range = SUMPLES_SIZE;
-      for (int i = 0; i < range; i++) {
-        avgFrequency += samples[i];
+        // Obliczanie średniej
+        int range = 0;
+        sensor.avgFrequency = 0;
+        if (sensor.firstSequence)
+          range = sensor.sampleIndex;
+        else
+          range = SUMPLES_SIZE;
+        for (int j = 0; j < range; j++) {
+          sensor.avgFrequency += sensor.samples[j];
+        }
+        sensor.avgFrequency /= range;
       }
-      avgFrequency /= range;
+      sensor.firstMeasurement = false;
     }
-    firstMeasurement = false;
   }
 
   M5.Lcd.setTextSize(2);
@@ -144,23 +186,28 @@ void loop() {
 
   char buffer[40];
 
-  snprintf(buffer, sizeof(buffer), "Time: %i ms", timeCount * 100);
-  M5.Lcd.println(buffer);
+  for (int i = 0; i < NUM_SENSORS; i++) {
+    FlowSensor &sensor = sensors[i];  // Odwołanie do aktualnego przepływomierza
 
-  snprintf(buffer, sizeof(buffer), "Pulses: %i\n", pulseCount);
-  M5.Lcd.println(buffer);
+    // snprintf(buffer, sizeof(buffer), "Sensor %d:", i + 1);
+    // M5.Lcd.println(buffer);
 
-  M5.Lcd.setTextSize(3);
-  snprintf(buffer, sizeof(buffer), "1s  %.2f Hz", avgFrequency);
-  M5.Lcd.println(buffer);
-  M5.Lcd.setTextSize(2);
-  M5.Lcd.println("AVERAGE OF THE LATEST\n");
+    // snprintf(buffer, sizeof(buffer), "Time: %i ms", timeCount * 100);
+    // M5.Lcd.println(buffer);
 
-  M5.Lcd.setTextSize(3);
-  snprintf(buffer, sizeof(buffer), "1s  %.2f Hz", frequency);
-  M5.Lcd.println(buffer);
-  M5.Lcd.setTextSize(2);
-  M5.Lcd.println("INSTANT MEASUREMENT\N");
+    // snprintf(buffer, sizeof(buffer), "Pulses: %i\n", sensor.pulseCount);
+    // M5.Lcd.println(buffer);
+
+    M5.Lcd.setTextSize(2);
+    snprintf(buffer, sizeof(buffer), "INSTANT %.2f Hz\n", sensor.frequency);
+    M5.Lcd.println(buffer);
+
+    M5.Lcd.setTextSize(3);
+    snprintf(buffer, sizeof(buffer), "%.2f Hz\n", sensor.avgFrequency);
+    M5.Lcd.println(buffer);
+  }
+
+  M5.Lcd.drawFastHLine(0, DISPLAY_HEIGH/3-10, DISPLAY_WIDTH, TFT_WHITE);
 
   // Sprawdzenie dotknięcia ekranu
   M5.update();
@@ -172,4 +219,5 @@ void loop() {
       reset();
     }
   }
+  
 }
