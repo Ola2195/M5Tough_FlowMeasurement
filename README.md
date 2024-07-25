@@ -46,3 +46,5 @@ GPIO interrupt handling was tested up to 100 kHz; at 101 kHz, signal integrity i
 2. Power on the device.
 3. The flow rate for each sensor will be displayed on the M5Stack TOUGH screen in real-time. The displayed values include the averaged flow rate and the instantaneous measurement for each sensor.
 4. Use the on-screen reset button to clear all measurements and start fresh as needed.
+
+![Example View](Example.jpeg)
