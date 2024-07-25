@@ -82,4 +82,3 @@ GPIO interrupt handling was tested up to 100 kHz; at 101 kHz, signal integrity i
 |GPIO37<BR>`ADC1_CH1`| ---                                   |
 |GPIO38<BR>`ADC1_CH2`|`M-Bus`<BR>**SPI_MISO**                |
 |GPIO39<BR>`ADC1_CH3`|**TP_INT**                             |
-|                    |M5Stack<BR>Core2(AWS)<BR>Tough         |
