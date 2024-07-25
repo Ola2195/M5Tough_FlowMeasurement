@@ -51,60 +51,60 @@ GPIO interrupt handling was tested up to 100 kHz; at 101 kHz, signal integrity i
 
 ## M5Stack Core2 (AWS) Tough - Pinout
 
-| **GPIO**           | **Funkcje**                                                                | **Zajęty przez**                         |
-|:------------------:|:--------------------------------------------------------------------------:|:----------------------------------------:|
-| **GPIO 0**         | `ADC2_CH1`                                                                 | M-Bus, **SPK_LRCK**, PDM_C (Core2)       |
-| **GPIO 1**         | `USB_TX`                                                                   | M-Bus, **Serial**                        |
-| **GPIO 2**         | `ADC2_CH2`                                                                 | M-Bus, **SPK_D**                         |
-| **GPIO 3**         | `USB_RX`                                                                   | M-Bus, **Serial**                        |
-| **GPIO 4**         | `ADC2_CH0`                                                                 | **TF_CS**                                |
+| **GPIO**           | **Functions**                                                                | **Used by**                              |
+|:------------------:|:----------------------------------------------------------------------------:|:----------------------------------------:|
+| **GPIO 0**         | `ADC2_CH1`                                                                   | M-Bus, **SPK_LRCK**, PDM_C (Core2)       |
+| **GPIO 1**         | `USB_TX`                                                                     | M-Bus, **Serial**                        |
+| **GPIO 2**         | `ADC2_CH2`                                                                   | M-Bus, **SPK_D**                         |
+| **GPIO 3**         | `USB_RX`                                                                     | M-Bus, **Serial**                        |
+| **GPIO 4**         | `ADC2_CH0`                                                                   | **TF_CS**                                |
 | **GPIO 5**         |                                                                            | **LCD_CS**                               |
 | **GPIO 9**         |                                                                            | ---                                      |
 | **GPIO 10**        |                                                                            | ---                                      |
-| **GPIO 12**        | `ADC2_CH5`                                                                 | **SPK_BCLK**                             |
-| **GPIO 13**        | `ADC2_CH4`                                                                 | M-Bus, RXD2                              |
-| **GPIO 14**        | `ADC2_CH6`                                                                 | M-Bus, TXD2                              |
-| **GPIO 15**        | `ADC2_CH3`                                                                 | **LCD_D/C**                              |
-| **GPIO 16**        | `PSRAM`                                                                    | ---                                      |
-| **GPIO 17**        | `PSRAM`                                                                    | ---                                      |
+| **GPIO 12**        | `ADC2_CH5`                                                                   | **SPK_BCLK**                             |
+| **GPIO 13**        | `ADC2_CH4`                                                                   | M-Bus, RXD2                              |
+| **GPIO 14**        | `ADC2_CH6`                                                                   | M-Bus, TXD2                              |
+| **GPIO 15**        | `ADC2_CH3`                                                                   | **LCD_D/C**                              |
+| **GPIO 16**        | `PSRAM`                                                                      | ---                                      |
+| **GPIO 17**        | `PSRAM`                                                                      | ---                                      |
 | **GPIO 18**        |                                                                            | **SPI_SCLK**                             |
 | **GPIO 19**        |                                                                            | M-Bus                                    |
 | **GPIO 21**        |                                                                            | **I2C1_SDA**                             |
 | **GPIO 22**        |                                                                            | **I2C1_SCL**                             |
 | **GPIO 23**        |                                                                            | **SPI_MOSI**                             |
-| **GPIO 25**        | `DAC1`                                                                     | M-Bus, **RGB LED** (AWS)                 |
-| **GPIO 26**        | `DAC2`                                                                     | M-Bus                                    |
-| **GPIO 27**        | `ADC2_CH7`                                                                 | M-Bus                                    |
-| **GPIO 32**        | `ADC1_CH4`                                                                 | M-Bus, `PORT.A`, I2C0_SDA                |
-| **GPIO 33**        | `ADC1_CH5`                                                                 | M-Bus, `PORT.A`, I2C0_SCL                |
-| **GPIO 34**        | `ADC1_CH6`                                                                 | M-Bus, **PDM_D** (Core2)                 |
-| **GPIO 35**        | `ADC1_CH7`                                                                 | M-Bus                                    |
-| **GPIO 36**        | `ADC1_CH0`                                                                 | M-Bus                                    |
-| **GPIO 37**        | `ADC1_CH1`                                                                 | ---                                      |
-| **GPIO 38**        | `ADC1_CH2`                                                                 | M-Bus, **SPI_MISO**                      |
-| **GPIO 39**        | `ADC1_CH3`                                                                 | **TP_INT**                               |
+| **GPIO 25**        | `DAC1`                                                                       | M-Bus, **RGB LED** (AWS)                 |
+| **GPIO 26**        | `DAC2`                                                                       | M-Bus                                    |
+| **GPIO 27**        | `ADC2_CH7`                                                                   | M-Bus                                    |
+| **GPIO 32**        | `ADC1_CH4`                                                                   | M-Bus, `PORT.A`, I2C0_SDA                |
+| **GPIO 33**        | `ADC1_CH5`                                                                   | M-Bus, `PORT.A`, I2C0_SCL                |
+| **GPIO 34**        | `ADC1_CH6`                                                                   | M-Bus, **PDM_D** (Core2)                 |
+| **GPIO 35**        | `ADC1_CH7`                                                                   | M-Bus                                    |
+| **GPIO 36**        | `ADC1_CH0`                                                                   | M-Bus                                    |
+| **GPIO 37**        | `ADC1_CH1`                                                                   | ---                                      |
+| **GPIO 38**        | `ADC1_CH2`                                                                   | M-Bus, **SPI_MISO**                      |
+| **GPIO 39**        | `ADC1_CH3`                                                                   | **TP_INT**                               |
 
-### Dostępne piny
+### Available Pins
 
-#### Wolne piny
+#### Free Pins
 - **GPIO 9**
 - **GPIO 10**
 - **GPIO 16**
 - **GPIO 17**
 - **GPIO 37** - `ADC1_CH1`
 
-#### Piny częściowo dostępne
-- **GPIO 0** - `ADC2_CH1`: używane przez **M-Bus** i **SPK_LRCK**.
-- **GPIO 4** - `ADC2_CH0`: używane przez **TF_CS**.
-- **GPIO 12** - `ADC2_CH5`: używane przez **SPK_BCLK**.
-- **GPIO 13** - `ADC2_CH4`: RXD2 w **M-Bus**.
-- **GPIO 14** - `ADC2_CH6`: TXD2 w **M-Bus**.
+#### Partially Available Pins
+- **GPIO 0** - `ADC2_CH1`: used by **M-Bus** and **SPK_LRCK**.
+- **GPIO 4** - `ADC2_CH0`: used by **TF_CS**.
+- **GPIO 12** - `ADC2_CH5`: used by **SPK_BCLK**.
+- **GPIO 13** - `ADC2_CH4`: RXD2 in **M-Bus**.
+- **GPIO 14** - `ADC2_CH6`: TXD2 in **M-Bus**.
 - **GPIO 26** - `DAC2`: `M-Bus`.
 - **GPIO 27** - `ADC2_CH7`: `M-Bus`.
 - **GPIO 35** - `ADC1_CH7`: `M-Bus`.
 - **GPIO 36** - `ADC1_CH0`: `M-Bus`.
 
-#### Piny zajęte
+#### Occupied Pins
 - **GPIO 1** - `USB_TX`: **Serial**.
 - **GPIO 2** - `ADC2_CH2`: **SPK_D**.
 - **GPIO 3** - `USB_RX`: **Serial**.
