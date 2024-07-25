@@ -48,3 +48,38 @@ GPIO interrupt handling was tested up to 100 kHz; at 101 kHz, signal integrity i
 4. Use the on-screen reset button to clear all measurements and start fresh as needed.
 
 ![Example View](Example.jpeg)
+
+## GPIO list
+|                    |M5Stack Core2(AWS) Tough               |
+|:------------------:|:-------------------------------------:|
+|GPIO 0<BR>`ADC2_CH1`|`M-Bus`<BR>**SPK_LRCK<BR>PDM_C**(Core2)|
+|GPIO 1<BR>`USB_TX`  |`M-Bus`<BR>**Serial**                  |
+|GPIO 2<BR>`ADC2_CH2`|`M-Bus`<BR>**SPK_D**                   |
+|GPIO 3<BR>`USB_RX`  |`M-Bus`<BR>**Serial**                  |
+|GPIO 4<BR>`ADC2_CH0`|**TF_CS**                              |
+|GPIO 5              |**LCD_CS**                             |
+|GPIO 9              | ---                                   |
+|GPIO10              | ---                                   |
+|GPIO12<BR>`ADC2_CH5`|**SPK_BCLK**                           |
+|GPIO13<BR>`ADC2_CH4`|`M-Bus`<BR>RXD2                        |
+|GPIO14<BR>`ADC2_CH6`|`M-Bus`<BR>TXD2                        |
+|GPIO15<BR>`ADC2_CH3`|**LCD_D/C**                            |
+|GPIO16<BR>`PSRAM`   | ---                                   |
+|GPIO17<BR>`PSRAM`   | ---                                   |
+|GPIO18              |**SPI_SCLK**                           |
+|GPIO19              |`M-Bus`                                |
+|GPIO21              |**I2C1_SDA**                           |
+|GPIO22              |**I2C1_SCL**                           |
+|GPIO23              |**SPI_MOSI**                           |
+|GPIO25<BR>`DAC1`    |`M-Bus`<BR>**RGB LED**(AWS)            |
+|GPIO26<BR>`DAC2`    |`M-Bus`                                |
+|GPIO27<BR>`ADC2_CH7`|`M-Bus`                                |
+|GPIO32<BR>`ADC1_CH4`|`M-Bus`<BR>`PORT.A`<BR>I2C0_SDA        |
+|GPIO33<BR>`ADC1_CH5`|`M-Bus`<BR>`PORT.A`<BR>I2C0_SCL        |
+|GPIO34<BR>`ADC1_CH6`|`M-Bus`<BR>**PDM_D**(Core2)            |
+|GPIO35<BR>`ADC1_CH7`|`M-Bus`                                |
+|GPIO36<BR>`ADC1_CH0`|`M-Bus`                                |
+|GPIO37<BR>`ADC1_CH1`| ---                                   |
+|GPIO38<BR>`ADC1_CH2`|`M-Bus`<BR>**SPI_MISO**                |
+|GPIO39<BR>`ADC1_CH3`|**TP_INT**                             |
+|                    |M5Stack<BR>Core2(AWS)<BR>Tough         |
