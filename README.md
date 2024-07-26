@@ -1,123 +1,118 @@
 # M5Tough_FlowMeasurement
 
-M5Tough_FlowMeasurement is a project based on the M5Stack TOUGH ESP32 microcontroller designed to measure liquid flow one or more flow sensors. The measured results are displayed in real-time on the device's screen.
+M5Tough_FlowMeasurement is a project that utilizes the M5Stack TOUGH ESP32 microcontroller to measure liquid flow using one or more flow sensors. The project displays real-time measurements on the device's screen, providing both instantaneous and averaged flow rates for sensors.
 
 ## Description
 
-This project utilizes liquid flow sensors connected to the M5Stack TOUGH ESP32 microcontroller to monitor and display the flow rate in Hertz (Hz) for one or more sensors. The view is currently prepared for two measurements.
-The code leverages interrupts and timers of the ESP32 for accurate pulse counting from the flow sensors, ensuring precise measurement results.
-The timer is configured with a precision of 100 milliseconds (ms).
-Measurements are averaged over the last 10 samples to smooth out fluctuations in the flow rate. Initially, the average is calculated progressively as more samples are collected to stabilize the readings.
-The screen displays the flow rate both as an averaged value and as an instant measurement for each connected sensor.
-A reset button on the screen allows the user to reset all counters and measurements.
+The M5Tough_FlowMeasurement project is designed for monitoring liquid flow using flow sensors connected to the M5Stack TOUGH ESP32 microcontroller. The project displays flow rates in Hertz (Hz) on the device's screen, supporting real-time monitoring for up to two sensors.
 
-GPIO interrupt handling was tested up to 100 kHz; at 101 kHz, signal integrity issues were observed.
+Key components and functionality include:
+
+- **Accurate Pulse Counting**: Utilizing the ESP32's interrupts and timers, the project ensures precise pulse counting from flow sensors, providing accurate flow measurements.
+- **Averaged Measurements**: To mitigate fluctuations and noise in the flow readings, measurements are averaged over the last 10 samples. During the initial measurement phase, the average is progressively calculated as more samples are collected, stabilizing the readings.
+- **Real-Time Display**: The screen displays both the averaged flow rate and instantaneous measurements for each connected sensor.
+- **Reset Functionality**: A reset button on the screen allows users to reset all counters and measurements, offering flexibility during testing or operation.
+
+### Technical Details
+
+- **Timer Configuration**: The timer is configured with a precision of 100 milliseconds (ms), ensuring high-resolution pulse counting.
+- **GPIO Interrupt Handling**: Interrupt handling was tested up to 100 kHz. At 101 kHz, signal integrity issues were observed, indicating the system's operational limits.
+- **Multiple Sensor Support**: The system is prepared to handle measurements for two sensors simultaneously, making it suitable for various applications where multi-sensor monitoring is required.
 
 ## Features
 
-- Real-time monitoring of liquid flow rate for up to two sensors
-- Utilization of ESP32 interrupts and timers for precise pulse counting from the flow sensors
-- Averaging of flow measurements over the last 10 samples to reduce noise
-- Displaying flow rate in Hertz (Hz) on the M5Stack TOUGH screen for each sensor
-- Reset button for resetting all counters and measurements
+- **Real-Time Monitoring**: Monitor liquid flow rates for up to two sensors in real time.
+- **Precise Measurements**: Utilization of ESP32's interrupts and timers for accurate pulse counting.
+- **Averaged Readings**: Averaging of flow measurements over the last 10 samples to reduce noise and fluctuations.
+- **Display**: Visual representation of flow rates in Hertz (Hz) on the M5Stack TOUGH screen for each sensor.
+- **Reset Button**: On-screen button for resetting all counters and measurements, allowing for quick reinitialization.
 
 ## Hardware Requirements
 
-- M5Stack TOUGH ESP32 microcontroller
-- One or more flow sensors sensor with pulse output
-- Connecting wires
+To set up and run this project, you will need the following hardware components:
+
+- **M5Stack TOUGH ESP32 microcontroller**: The main controller responsible for processing sensor data and displaying results.
+- **Flow Sensors**: One or more flow sensors with pulse output capability. These sensors will be used to measure the liquid flow rate.
+- **Connecting Wires**: Wires for connecting the flow sensors to the GPIO pins on the M5Stack TOUGH.
 
 ## Installation
 
-1. Open the project in Arduino IDE.
-2. Ensure you have the following libraries installed:
-    - M5Unified
-    - Arduino.h (ESP32 core)
-3. Configure the appropriate board settings in the Arduino IDE for M5Stack TOUGH ESP32.
-4. Upload the code to the M5Stack TOUGH ESP32 device.
+Follow these steps to install and set up the M5Tough_FlowMeasurement project on your M5Stack TOUGH ESP32 microcontroller:
+
+1. **Open the Project in Arduino IDE**:
+   - Download the project files and open the main sketch in the Arduino IDE.
+
+2. **Install Required Libraries**:
+   - Ensure that you have the following libraries installed in the Arduino IDE:
+     - `M5Unified`: Provides support for M5Stack devices.
+     - `Arduino.h` (ESP32 core): Core library for ESP32 development.
+
+3. **Configure Board Settings**:
+   - Set the appropriate board settings in the Arduino IDE for M5Stack TOUGH ESP32. Select the correct board type and COM port from the Tools menu.
+
+4. **Upload the Code**:
+   - Connect your M5Stack TOUGH ESP32 to the computer via USB.
+   - Upload the code to the device by clicking the "Upload" button in the Arduino IDE.
 
 ## Usage
 
-1. Connect the flow sensors to the designated GPIO pins on the M5Tough and change the GPIO pin number in lines 10 and 11 in the M5Tough file.
-```cpp
-#define SENSOR_PIN_1    2
-#define SENSOR_PIN_2    36
-```
-2. Power on the device.
-3. The flow rate for each sensor will be displayed on the M5Stack TOUGH screen in real-time. The displayed values include the averaged flow rate and the instantaneous measurement for each sensor.
-4. Use the on-screen reset button to clear all measurements and start fresh as needed.
+To use the M5Tough_FlowMeasurement project, follow these instructions:
+
+1. **Connect the Flow Sensors**:
+   - Connect the flow sensors to the designated GPIO pins on the M5Stack TOUGH.
+   - Update the GPIO pin numbers in the `FlowManager.cpp` sketch if necessary. Change the values on lines 4 and 5 to match your wiring configuration:
+     ```cpp
+     #define SENSOR_PIN_1    2   // Update to the GPIO pin connected to Sensor 1
+     #define SENSOR_PIN_2    36  // Update to the GPIO pin connected to Sensor 2
+     ```
+
+2. **Power On the Device**:
+   - Turn on the M5Stack TOUGH device. Ensure that it is properly powered and connected to the flow sensors.
+
+3. **View Real-Time Flow Measurements**:
+   - The device will display flow rates for each sensor on the screen in real time.
+   - The displayed values include both the averaged flow rate and the instantaneous measurement for each sensor.
+
+4. **Reset Measurements**:
+   - Use the on-screen reset button to clear all measurements and start fresh. This can be useful during setup or testing phases.
+
+## Example View
 
 ![Example View](Example.jpeg)
 
+In this image, you can see how the real-time measurements are presented, with both instantaneous and averaged values clearly visible for each connected sensor.
+
 ## M5Stack Core2 (AWS) Tough - Pinout
 
-| **GPIO**           | **Functions**                                                                | **Used by**                              |
-|:------------------:|:----------------------------------------------------------------------------:|:----------------------------------------:|
-| **GPIO 0**         | `ADC2_CH1`                                                                   | M-Bus, **SPK_LRCK**, PDM_C (Core2)       |
-| **GPIO 1**         | `USB_TX`                                                                     | M-Bus, **Serial**                        |
-| **GPIO 2**         | `ADC2_CH2`                                                                   | M-Bus, **SPK_D**                         |
-| **GPIO 3**         | `USB_RX`                                                                     | M-Bus, **Serial**                        |
-| **GPIO 4**         | `ADC2_CH0`                                                                   | **TF_CS**                                |
-| **GPIO 5**         |                                                                            | **LCD_CS**                               |
-| **GPIO 9**         |                                                                            | ---                                      |
-| **GPIO 10**        |                                                                            | ---                                      |
-| **GPIO 12**        | `ADC2_CH5`                                                                   | **SPK_BCLK**                             |
-| **GPIO 13**        | `ADC2_CH4`                                                                   | M-Bus, RXD2                              |
-| **GPIO 14**        | `ADC2_CH6`                                                                   | M-Bus, TXD2                              |
-| **GPIO 15**        | `ADC2_CH3`                                                                   | **LCD_D/C**                              |
-| **GPIO 16**        | `PSRAM`                                                                      | ---                                      |
-| **GPIO 17**        | `PSRAM`                                                                      | ---                                      |
-| **GPIO 18**        |                                                                            | **SPI_SCLK**                             |
-| **GPIO 19**        |                                                                            | M-Bus                                    |
-| **GPIO 21**        |                                                                            | **I2C1_SDA**                             |
-| **GPIO 22**        |                                                                            | **I2C1_SCL**                             |
-| **GPIO 23**        |                                                                            | **SPI_MOSI**                             |
-| **GPIO 25**        | `DAC1`                                                                       | M-Bus, **RGB LED** (AWS)                 |
-| **GPIO 26**        | `DAC2`                                                                       | M-Bus                                    |
-| **GPIO 27**        | `ADC2_CH7`                                                                   | M-Bus                                    |
-| **GPIO 32**        | `ADC1_CH4`                                                                   | M-Bus, `PORT.A`, I2C0_SDA                |
-| **GPIO 33**        | `ADC1_CH5`                                                                   | M-Bus, `PORT.A`, I2C0_SCL                |
-| **GPIO 34**        | `ADC1_CH6`                                                                   | M-Bus, **PDM_D** (Core2)                 |
-| **GPIO 35**        | `ADC1_CH7`                                                                   | M-Bus                                    |
-| **GPIO 36**        | `ADC1_CH0`                                                                   | M-Bus                                    |
-| **GPIO 37**        | `ADC1_CH1`                                                                   | ---                                      |
-| **GPIO 38**        | `ADC1_CH2`                                                                   | M-Bus, **SPI_MISO**                      |
-| **GPIO 39**        | `ADC1_CH3`                                                                   | **TP_INT**                               |
-
-### Available Pins
-
-#### Free Pins
-- **GPIO 9**
-- **GPIO 10**
-- **GPIO 16**
-- **GPIO 17**
-- **GPIO 37** - `ADC1_CH1`
-
-#### Partially Available Pins
-- **GPIO 0** - `ADC2_CH1`: used by **M-Bus** and **SPK_LRCK**.
-- **GPIO 4** - `ADC2_CH0`: used by **TF_CS**.
-- **GPIO 12** - `ADC2_CH5`: used by **SPK_BCLK**.
-- **GPIO 13** - `ADC2_CH4`: RXD2 in **M-Bus**.
-- **GPIO 14** - `ADC2_CH6`: TXD2 in **M-Bus**.
-- **GPIO 26** - `DAC2`: `M-Bus`.
-- **GPIO 27** - `ADC2_CH7`: `M-Bus`.
-- **GPIO 35** - `ADC1_CH7`: `M-Bus`.
-- **GPIO 36** - `ADC1_CH0`: `M-Bus`.
-
-#### Occupied Pins
-- **GPIO 1** - `USB_TX`: **Serial**.
-- **GPIO 2** - `ADC2_CH2`: **SPK_D**.
-- **GPIO 3** - `USB_RX`: **Serial**.
-- **GPIO 5**: **LCD_CS**.
-- **GPIO 15** - `ADC2_CH3`: **LCD_D/C**.
-- **GPIO 18**: **SPI_SCLK**.
-- **GPIO 19**: `M-Bus`.
-- **GPIO 21**: **I2C1_SDA**.
-- **GPIO 22**: **I2C1_SCL**.
-- **GPIO 23**: **SPI_MOSI**.
-- **GPIO 25** - `DAC1`: **RGB LED** (AWS).
-- **GPIO 32** - `ADC1_CH4`: `PORT.A`, I2C0_SDA.
-- **GPIO 33** - `ADC1_CH5`: `PORT.A`, I2C0_SCL.
-- **GPIO 34** - `ADC1_CH6`: **PDM_D** (Core2).
-- **GPIO 38** - `ADC1_CH2`: **SPI_MISO**.
-- **GPIO 39** - `ADC1_CH3`: **TP_INT**.
+| **GPIO**           | **Functions**                        | **Used by**                              | **Availability**       |
+|:------------------:|:------------------------------------:|:----------------------------------------:|:----------------------:|
+| **GPIO 0**         | `ADC2_CH1`                           | M-Bus, **SPK_LRCK**, PDM_C (Core2)       | Partially Available    |
+| **GPIO 1**         | `USB_TX`                             | M-Bus, **Serial**                        | Occupied               |
+| **GPIO 2**         | `ADC2_CH2`                           | M-Bus, **SPK_D**                         | Occupied               |
+| **GPIO 3**         | `USB_RX`                             | M-Bus, **Serial**                        | Occupied               |
+| **GPIO 4**         | `ADC2_CH0`                           | **TF_CS**                                | Partially Available    |
+| **GPIO 5**         |                                      | **LCD_CS**                               | Occupied               |
+| **GPIO 9**         |                                      | ---                                      | Free                   |
+| **GPIO 10**        |                                      | ---                                      | Free                   |
+| **GPIO 12**        | `ADC2_CH5`                           | **SPK_BCLK**                             | Partially Available    |
+| **GPIO 13**        | `ADC2_CH4`                           | M-Bus, RXD2                              | Partially Available    |
+| **GPIO 14**        | `ADC2_CH6`                           | M-Bus, TXD2                              | Partially Available    |
+| **GPIO 15**        | `ADC2_CH3`                           | **LCD_D/C**                              | Occupied               |
+| **GPIO 16**        | `PSRAM`                              | ---                                      | Free                   |
+| **GPIO 17**        | `PSRAM`                              | ---                                      | Free                   |
+| **GPIO 18**        |                                      | **SPI_SCLK**                             | Occupied               |
+| **GPIO 19**        |                                      | M-Bus                                    | Occupied               |
+| **GPIO 21**        |                                      | **I2C1_SDA**                             | Occupied               |
+| **GPIO 22**        |                                      | **I2C1_SCL**                             | Occupied               |
+| **GPIO 23**        |                                      | **SPI_MOSI**                             | Occupied               |
+| **GPIO 25**        | `DAC1`                               | M-Bus, **RGB LED** (AWS)                 | Occupied               |
+| **GPIO 26**        | `DAC2`                               | M-Bus                                    | Partially Available    |
+| **GPIO 27**        | `ADC2_CH7`                           | M-Bus                                    | Partially Available    |
+| **GPIO 32**        | `ADC1_CH4`                           | M-Bus, `PORT.A`, I2C0_SDA                | Occupied               |
+| **GPIO 33**        | `ADC1_CH5`                           | M-Bus, `PORT.A`, I2C0_SCL                | Occupied               |
+| **GPIO 34**        | `ADC1_CH6`                           | M-Bus, **PDM_D** (Core2)                 | Occupied               |
+| **GPIO 35**        | `ADC1_CH7`                           | M-Bus                                    | Partially Available    |
+| **GPIO 36**        | `ADC1_CH0`                           | M-Bus                                    | Partially Available    |
+| **GPIO 37**        | `ADC1_CH1`                           | ---                                      | Free                   |
+| **GPIO 38**        | `ADC1_CH2`                           | M-Bus, **SPI_MISO**                      | Occupied               |
+| **GPIO 39**        | `ADC1_CH3`                           | **TP_INT**                               | Occupied               |
