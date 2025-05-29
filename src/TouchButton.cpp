@@ -1,4 +1,4 @@
-#include "TouchButton.h"
+#include "include/TouchButton.h"
 
 TouchButton::TouchButton(const String& label, int x, int y, int width, int height, uint16_t color, uint16_t textColor)
   : _label(label), _x(x), _y(y), _width(width), _height(height), _color(color), _textColor(textColor) {}

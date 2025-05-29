@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <M5Unified.h>
 
-#include "FlowManager.h"
-#include "M5ToughDisplay.h"
+#include "include/FlowManager.h"
+#include "include/M5ToughDisplay.h"
 
 FlowManager manager;
 M5ToughDisplay display;

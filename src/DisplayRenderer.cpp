@@ -1,4 +1,4 @@
-#include "DisplayRenderer.h"
+#include "include/DisplayRenderer.h"
 
 DisplayRenderer::DisplayRenderer(int displayWidth, int displayHeight)
   : _displayWidth(displayWidth), _displayHeight(displayHeight) {
