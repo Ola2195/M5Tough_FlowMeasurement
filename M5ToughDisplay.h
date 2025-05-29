@@ -91,3 +91,4 @@ class M5ToughDisplay {
     int autoPadSpaces(const String& text, int textSize);
 };
 
+#endif // M5TOUGHDISPLAY_H

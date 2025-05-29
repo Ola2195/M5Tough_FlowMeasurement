@@ -38,8 +38,8 @@ void loop() {
   //              date.year, date.month, date.date,
   //              time.hours, time.minutes, time.seconds);
 
-
- = manager.getSensor(i);
+  for (size_t i = 0; i < manager.getNumSensors(); ++i) {
+    FlowSensor* sensor = manager.getSensor(i);
     if (sensor) {
       // Display sensor measurements
       display.displayMeasurements(sensor->getInstantFrequency(), sensor->getAvgFrequency());
@@ -53,5 +53,3 @@ void loop() {
     display.clearScreen();  // Clear the display screen
   }
 }
-
-  */

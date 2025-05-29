@@ -85,3 +85,4 @@ void M5ToughDisplay::clearScreen(void) {
 
 bool M5ToughDisplay::isPressedResetButton(int x, int y) {
   return (x >= resetButtonPositionX && x <= resetButtonWidth + resetButtonPositionX && y >= resetButtonPositionY && y <= resetButtonPositionY + resetButtonHeight);
+}

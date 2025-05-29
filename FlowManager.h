@@ -80,3 +80,4 @@ class FlowManager {
     volatile bool firstMeasurement;  // Flag indicating the first measurement sequence
 };
 
+#endif // FLOWMANAGER_H
