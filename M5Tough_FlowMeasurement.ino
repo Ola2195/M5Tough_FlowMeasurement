@@ -13,9 +13,10 @@ M5ToughDisplay display;
 void setup() {
   Serial.begin(115200);  // Initialize serial port with a baud rate of 115200
 
-  display.startDrawing();      // Start the display
   manager.setupTimer();        // Set up the timer
   manager.setupFlowSensors();  // Initialize the flow sensors
+
+  display.startDrawing();      // Start the display
   display.drawResetButton();   // Draw the reset button on the display
 }
 
@@ -23,14 +24,14 @@ void setup() {
  * Main loop
  */
 void loop() {
-  if (manager.measurementFlag) {
-    manager.measurementsProcessing();  // Process measurements if the flag is set
-  }
-
   //m5::rtc_date_t date;
   //m5::rtc_time_t time;
   //M5.Rtc.getDate(&date);
   //M5.Rtc.getTime(&time);
+
+  if (manager.measurementFlag) {
+    manager.measurementsProcessing();  // Process measurements if the flag is set
+  }
 
   display.firstDisplaying();  // Set initial display settings
 

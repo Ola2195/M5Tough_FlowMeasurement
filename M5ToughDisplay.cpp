@@ -5,11 +5,8 @@
 #define DISPLAY_HEIGHT 240
 
 M5ToughDisplay::M5ToughDisplay(void)
-  : margin(20), 
-    resetButtonHeight(40),
-    resetButtonWidth(DISPLAY_WIDTH - 2 * 20),
-    resetButtonPositionX(20),
-    resetButtonPositionY(DISPLAY_HEIGHT - 40 - 20) {}
+  : margin(20),
+    resetButton("RESET", margin, DISPLAY_HEIGHT- 40 - margin, DISPLAY_WIDTH - 2 * margin, 40) {}
 
 void M5ToughDisplay::startDrawing(void) {
   //auto cfg = M5.config();
@@ -20,11 +17,7 @@ void M5ToughDisplay::startDrawing(void) {
 }
 
 void M5ToughDisplay::drawResetButton(void) {
-  M5.Lcd.fillRect(resetButtonPositionX, resetButtonPositionY, resetButtonWidth, resetButtonHeight, TFT_WHITE);
-  M5.Lcd.setTextColor(TFT_BLACK);
-  M5.Lcd.setCursor(resetButtonWidth / 2 - resetButtonPositionX, resetButtonPositionY + 10);
-  M5.Lcd.setTextSize(3);
-  M5.Lcd.print("RESET");
+  resetButton.draw();
 }
 
 
@@ -32,9 +25,11 @@ M5ToughDisplay::PressedStatus_t M5ToughDisplay::isPressed(void) {
   M5.update();
   if (M5.Touch.getCount() > 0) {
     auto detail = M5.Touch.getDetail();
-    if (isPressedResetButton(detail.x, detail.y)) {
+    if (resetButton.wasJustPressed(detail.x, detail.y)) {
       return RESET_BUTTON;
     }
+  } else {
+    resetButton.wasJustPressed(-1, -1);
   }
   return NONE;
 }
@@ -80,9 +75,5 @@ int M5ToughDisplay::autoPadSpaces(const String& text, int textSize) {
 }
 
 void M5ToughDisplay::clearScreen(void) {
-  M5.Lcd.fillRect(0, 0, DISPLAY_WIDTH, resetButtonPositionY, BLACK);
-}
-
-bool M5ToughDisplay::isPressedResetButton(int x, int y) {
-  return (x >= resetButtonPositionX && x <= resetButtonWidth + resetButtonPositionX && y >= resetButtonPositionY && y <= resetButtonPositionY + resetButtonHeight);
+  M5.Lcd.fillRect(0, 0, DISPLAY_WIDTH, resetButton.getY(), BLACK);
 }

@@ -2,6 +2,7 @@
 #define M5TOUGHDISPLAY_H
 
 #include <Arduino.h>
+#include "TouchButton.h"
 
 /*
  * @brief     Class to manage the M5Tough display functionality.
@@ -67,10 +68,8 @@ class M5ToughDisplay {
 
   private:
     int margin;               // Margin for positioning elements
-    int resetButtonHeight;    // Height of the reset button
-    int resetButtonWidth;     // Width of the reset button
-    int resetButtonPositionX; // X position of the reset button
-    int resetButtonPositionY; // Y position of the reset button
+
+    TouchButton resetButton;
 
     /*
      * @brief   Checks if the reset button is pressed.

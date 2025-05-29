@@ -31,7 +31,7 @@ void FlowManager::setupTimer(void) {
   timerAttachInterrupt(timer, FlowManager::onTimer);
   //timerAlarmWrite(timer, 100000, true);                     // 100 ms = 100000 us
   //timerAlarmEnable(timer);
-  timerAlarm(timer, 1000000, true, 0);
+  timerAlarm(timer, 100000, true, 0);
 }
 
 void FlowManager::setupFlowSensors(void) {
@@ -57,6 +57,7 @@ void FlowManager::measurementsProcessing(void) {
 
 void FlowManager::reset(void) {
   //timerAlarmDisable(timer);  // Disable timer interrupts during reset
+  timerAlarm(timer, 100000, true, 1000000000);
 
   for (size_t i = 0; i < numSensors; ++i) {
     sensors[i]->detachSensorInterrupt();  // Detach sensor interrupts
@@ -75,7 +76,7 @@ void FlowManager::reset(void) {
   }
 
   //timerAlarmEnable(timer);  // Enable timer interrupts after reset
-  timerAlarm(timer, 1000000, true, 0);
+  timerAlarm(timer, 100000, true, 0);
 }
 
 FlowSensor* FlowManager::getSensor(size_t index) const {
