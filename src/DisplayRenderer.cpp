@@ -4,7 +4,6 @@ DisplayRenderer::DisplayRenderer(int displayWidth, int displayHeight)
   : _displayWidth(displayWidth), _displayHeight(displayHeight) {
 }
 
-//displayMoreDetails
 void DisplayRenderer::renderMeasurements(float frequency, float avgFrequency) {
   String line;
   int textSize;
@@ -31,12 +30,22 @@ void DisplayRenderer::renderSensorDetails(int sensorId, int timeCount, int pulse
   M5.Lcd.printf("Pulses: %i\n\n\n", pulseCount);
 }
 
-void DisplayRenderer::drawDividingLine() {
-  M5.Lcd.drawFastHLine(0, _displayHeight / 3 - 10, _displayWidth, TFT_WHITE);
+void DisplayRenderer::drawDividingLine(int y) {
+  if (y < 0 || y >= _displayHeight) return;
+  M5.Lcd.drawFastHLine(0, y, _displayWidth, TFT_WHITE);
 }
 
-void DisplayRenderer::clearAbove(int yLimit) {
-  M5.Lcd.fillRect(0, 0, _displayWidth, yLimit, BLACK);
+void DisplayRenderer::clearRegion(int yStart, int yEnd) {
+  if (yEnd <= yStart) return;
+  M5.Lcd.fillRect(0, yStart, _displayWidth, yEnd - yStart, BLACK);
+}
+
+int DisplayRenderer::getDisplayWidth() const {
+  return _displayWidth;
+}
+
+int DisplayRenderer::getDisplayHeight() const {
+  return _displayHeight;
 }
 
 int DisplayRenderer::autoPadSpaces(const String& text, int textSize) {

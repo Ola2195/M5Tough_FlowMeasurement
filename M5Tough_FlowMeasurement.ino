@@ -47,7 +47,7 @@ void loop() {
     }
   }
 
-  display.displayDividingLine();  // Draw a dividing line on the display
+  display.displayDividingLine();
 
   if (display.isPressed() == M5ToughDisplay::RESET_BUTTON) {
     manager.reset();        // Reset the flow manager

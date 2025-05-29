@@ -47,9 +47,9 @@ void M5ToughDisplay::displayMeasurements(float frequency, float avgFrequency) {
 }
 
 void M5ToughDisplay::displayDividingLine(void) {
-  renderer.drawDividingLine();
+  renderer.drawDividingLine(renderer.getDisplayHeight() / 3 - 10);
 }
 
 void M5ToughDisplay::clearScreen(void) {
-  renderer.clearAbove(resetButton.getY());
+  renderer.clearRegion(0, resetButton.getY());
 }

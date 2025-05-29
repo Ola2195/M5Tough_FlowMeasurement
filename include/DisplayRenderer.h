@@ -11,9 +11,12 @@ class DisplayRenderer {
     void renderMeasurements(float frequency, float avgFrequency);
     void renderSensorDetails(int sensorId, int timeCount, int pulseCount);
 
-    void drawDividingLine();
+    void drawDividingLine(int y);
 
-    void clearAbove(int yLimit);
+    void clearRegion(int yStart, int yEnd);
+
+    int getDisplayWidth() const;
+    int getDisplayHeight() const;
 
   private:
     int _displayWidth;
