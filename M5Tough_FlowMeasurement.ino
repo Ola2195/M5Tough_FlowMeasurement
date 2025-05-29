@@ -17,7 +17,7 @@ void setup() {
   manager.setupFlowSensors();  // Initialize the flow sensors
 
   display.startDrawing();      // Start the display
-  display.drawResetButton();   // Draw the reset button on the display
+  display.drawButtons();   // Draw the reset button on the display
 }
 
 /*

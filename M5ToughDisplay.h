@@ -3,6 +3,9 @@
 
 #include <Arduino.h>
 #include "TouchButton.h"
+#include "TouchUI.h"
+#include "DisplayRenderer.h"
+
 
 /*
  * @brief     Class to manage the M5Tough display functionality.
@@ -26,9 +29,9 @@ class M5ToughDisplay {
     void startDrawing(void);
 
     /*
-     * @brief   Draws the reset button on the display.
+     * @brief   Draws buttons on the display.
      */
-    void drawResetButton(void);
+    void drawButtons(void);
 
     /*
      * @brief   Checks which button is pressed on the display.
@@ -70,6 +73,8 @@ class M5ToughDisplay {
     int margin;               // Margin for positioning elements
 
     TouchButton resetButton;
+    TouchUI ui;
+    DisplayRenderer renderer;
 
     /*
      * @brief   Checks if the reset button is pressed.
