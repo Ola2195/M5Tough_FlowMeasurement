@@ -1,6 +1,8 @@
 #ifndef M5TOUGHDISPLAY_H
 #define M5TOUGHDISPLAY_H
 
+#include <Arduino.h>
+
 /*
  * @brief     Class to manage the M5Tough display functionality.
  * @details   This class handles drawing on the display, including showing measurements and reset buttons.
@@ -77,6 +79,15 @@ class M5ToughDisplay {
      * @retval  True if the reset button is pressed, false otherwise.
      */
     bool isPressedResetButton(int x, int y);
+
+    /**
+     * @brief   Calculates how many extra spaces are needed to fully overwrite a previous line of text.
+     * @param   text      The current line of text to be displayed.
+     * @param   textSize  The text size used (as in setTextSize).
+     * @retval  Number of additional spaces to pad at the end of the string.
+     *
+     * The function estimates text width based on character count and text size.
+     */
+    int autoPadSpaces(const String& text, int textSize);
 };
 
-#endif // M5TOUGHDISPLAY_H

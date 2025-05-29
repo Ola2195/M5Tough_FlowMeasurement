@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <M5Unified.h>
 
 #include "FlowManager.h"
 #include "M5ToughDisplay.h"
@@ -26,9 +27,19 @@ void loop() {
     manager.measurementsProcessing();  // Process measurements if the flag is set
   }
 
+  //m5::rtc_date_t date;
+  //m5::rtc_time_t time;
+  //M5.Rtc.getDate(&date);
+  //M5.Rtc.getTime(&time);
+
   display.firstDisplaying();  // Set initial display settings
-  for (size_t i = 0; i < manager.getNumSensors(); ++i) {
-    FlowSensor* sensor = manager.getSensor(i);
+
+  //M5.Lcd.printf("%04d-%02d-%02d %02d:%02d:%02d\n\n",
+  //              date.year, date.month, date.date,
+  //              time.hours, time.minutes, time.seconds);
+
+
+ = manager.getSensor(i);
     if (sensor) {
       // Display sensor measurements
       display.displayMeasurements(sensor->getInstantFrequency(), sensor->getAvgFrequency());
@@ -42,3 +53,5 @@ void loop() {
     display.clearScreen();  // Clear the display screen
   }
 }
+
+  */

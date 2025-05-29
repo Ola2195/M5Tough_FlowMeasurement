@@ -83,4 +83,3 @@ void IRAM_ATTR FlowSensor::pulseCounter() {
     instance->pulseCount++;
     portEXIT_CRITICAL_ISR(&instance->interruptMux);
   }
-}
