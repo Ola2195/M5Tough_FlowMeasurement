@@ -4,13 +4,13 @@
 #define DISPLAY_HEIGHT 240
 
 MainMeasurementView::MainMeasurementView(FlowManager& manager)
-  : _manager(manager), margin(20),
-    resetButton("RESET", margin, DISPLAY_HEIGHT- 40 - margin, DISPLAY_WIDTH - 2 * margin, 40) {
-  M5.begin();
-  M5.Lcd.fillScreen(BLACK);
+  : _manager(manager), _margin(20),
+    _resetButton("RESET", _margin, DISPLAY_HEIGHT- 40 - _margin, DISPLAY_WIDTH - 2 * _margin, 40) {}
 
-  ui.addButton("RESET", resetButton);
-  ui.drawButtons();
+void MainMeasurementView::setup() {
+  M5.Lcd.fillScreen(BLACK);
+  _ui.addButton("RESET", _resetButton);
+  _ui.drawButtons();
 }
 
 void MainMeasurementView::render() {
@@ -25,13 +25,13 @@ void MainMeasurementView::render() {
     }
   }
 
-  _renderer.drawDividingLine(_renderer.getDisplayHeight() / 3 - 10);;
+  _renderer.drawDividingLine(_renderer.getDisplayHeight() / 3 - 10);
 }
 
 void MainMeasurementView::update() {
-  ui.update();
-  if (ui.getJustPressed() == "RESET") {
-    _manager.reset();        // Reset the flow manager
-    _renderer.clearRegion(0, resetButton.getY());
+  _ui.update();
+  if (_ui.getJustPressed() == "RESET") {
+    _manager.reset();
+    _renderer.clearRegion(0, _resetButton.getY());
   } 
 }

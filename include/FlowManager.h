@@ -5,8 +5,9 @@
 #include "FlowSensor.h"
 
 /*
- * @brief     Class to manage multiple flow sensors and handle timing.
- * @details   This class sets up timers and manages the measurement and reset processes.
+ * @brief     Klasa do zarzadzania wieloma czujnikami przeplywu i obslugi czasu.
+ * @details   Odpowiada za inicjalizacje czujnikow, konfiguracje timera,
+ *            przetwarzanie pomiarow oraz resetowanie stanu ukladu.
  */
 class FlowManager {
   public:
