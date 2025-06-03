@@ -50,12 +50,12 @@ class MainMeasurementView : public BaseView {
     void update() override;
 
   private:
-    int _margin;                // Margines wokol przycisku RESET
+    int _margin;                ///< Margines wokol przycisku RESET
 
-    FlowManager& _manager;      // Referencja do menadzera pomiarow
-    DisplayRenderer _renderer;  // Klasa renderujaca dane na ekran
-    TouchButton _resetButton;   // Przycisk RESET
-    TouchUI _ui;                // Interfejs obslugi dotyku
+    FlowManager& _manager;      ///< Referencja do menadzera pomiarow
+    DisplayRenderer _renderer;  ///< Klasa renderujaca dane na ekran
+    TouchButton _resetButton;   ///< Przycisk RESET
+    TouchUI _ui;                ///< Interfejs obslugi dotyku
 };
 
 #endif // VIEW_H
