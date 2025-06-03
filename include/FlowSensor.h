@@ -3,98 +3,94 @@
 
 #include <Arduino.h>
 
-#define SAMPLE_SIZE  10   // Number of samples for averaging
+#define SAMPLE_SIZE  10   ///< Liczba probek do sredniowania
 
-/*
- * @brief     Class representing a flow sensor.
- * @details   This class manages flow sensor functionality including pulse counting and frequency calculation.
+/**
+ * Klasa reprezentujaca czujnik przeplywu
+ * Zarzadza liczeniem impulsow i obliczaniem czestotliwosci
  */
 class FlowSensor {
   public:
-    /*
-     * @brief   Constructor for FlowSensor.
-     * @param   pin   The pin number connected to the flow sensor.
+    /**
+     * Konstruktor czujnika przeplywu
+     * @param   pin   Numer pinu podlaczonego do czujnika przeplywu
      */
     FlowSensor(int pin);
 
-    /*
-     * @brief   Initializes the flow sensor.
+    /**
+     * Inicjalizuje czujnik przeplywu
      */
     void setupFlowSensor(void);
 
-    /*
-     * @brief   Attaches the interrupt to count sensor pulses.
+    /**
+     * Podlacza przerwanie do liczenia impulsow z czujnika
      */
     void attachSensorInterrupt(void);
 
-    /*
-     * @brief   Detaches the interrupt to stop counting sensor pulses.
+    /**
+     * Odlacza przerwanie, przestaje liczyc impulsy
      */
     void detachSensorInterrupt(void);
 
-    /*
-     * @brief   Updates the pulse count from the interrupt.
+    /**
+     * Aktualizuje licznik impulsow (wywolywane z przerwania)
      */
     void updatePulseCount(void);
 
-    /*
-     * @brief   Calculates the frequency based on pulse count.
+    /**
+     * Oblicza czestotliwosc na podstawie liczby impulsow
      */
     void calculateFrequency(void);
 
-    /*
-     * @brief   Updates the samples array with the current frequency.
+    /**
+     * Dodaje aktualna czestotliwosc do tablicy probek
      */
     void updateSamples(void);
 
-    /*
-     * @brief   Calculates the average frequency from the samples.
+    /**
+     * Oblicza srednia czestotliwosc na podstawie probek
      */
     void setAvgFrequency(void);
 
-    /*
-     * @brief   Resets the flow sensor, clearing counts and samples.
+    /**
+     * Resetuje czujnik przeplywu (czyści liczniki i probki)
      */
     void reset(void);
 
-    /*
-     * @brief   Gets the current instant frequency.
-     * @retval  Current frequency in Hz.
+    /**
+     * Zwraca chwilowa czestotliwosc w Hz
      */
     float getInstantFrequency(void) const;
 
-    /*
-     * @brief   Gets the average frequency.
-     * @retval  Average frequency in Hz.
+    /**
+     * Zwraca srednia czestotliwosc w Hz
      */
     float getAvgFrequency(void) const;
 
-    /*
-     * @brief   Gets the total pulse count.
-     * @retval  Total pulse count.
+    /**
+     * Zwraca laczna liczbe impulsow.
      */
     int getPulseCount(void) const;
 
   private:
-    int pin_;                     // Pin connected to the flow sensor
-    volatile int pulseCount;      // Number of pulses counted
-    volatile int lastPulseCount;  // Last pulse count for frequency calculation
-    volatile float frequency;     // Instantaneous frequency
+    int pin_;                     ///< Pin podlaczony do czujnika przeplywu
+    volatile int pulseCount;      ///< Licznik impulsow
+    volatile int lastPulseCount;  ///< Ostatnia liczba impulsow (do obliczen)
+    volatile float frequency;     ///< Chwilowa czestotliwosc
 
-    float samples[SAMPLE_SIZE];   // Array of samples for averaging
-    volatile int sampleIndex;     // Index for the samples array
-    volatile float avgFrequency;  // Average frequency from samples
-    volatile bool firstSequence;  // Flag indicating the first measurement sequence
+    float samples[SAMPLE_SIZE];   ///< Tablica probek do sredniowania
+    volatile int sampleIndex;     ///< Indeks do tablicy probek
+    volatile float avgFrequency;  ///< Srednia czestotliwosc
+    volatile bool firstSequence;  ///< Flaga oznaczajaca pierwszy pomiar
 
-    portMUX_TYPE interruptMux = portMUX_INITIALIZER_UNLOCKED;   // Critical section for interrupt protection
+    portMUX_TYPE interruptMux = portMUX_INITIALIZER_UNLOCKED;   ///< Sekcja krytyczna do ochrony przerwan
 
-    static FlowSensor* instance;    // Static instance pointer for interrupt handling
+    static FlowSensor* instance;    ///< Statyczny wskaznik instancji (do przerwan)
 
-    /*
-     * @brief   Interrupt service routine for counting pulses.
+    /**
+     * Funkcja obslugi przerwania liczaca impulsy.
      */
     static void IRAM_ATTR pulseCounter(void);
-
 };
 
 #endif // FLOWSENSOR_H
