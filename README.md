@@ -116,3 +116,129 @@ In this image, you can see how the real-time measurements are presented, with bo
 | **GPIO 37**        | `ADC1_CH1`                           | ---                                      | Free                   |
 | **GPIO 38**        | `ADC1_CH2`                           | M-Bus, **SPI_MISO**                      | Occupied               |
 | **GPIO 39**        | `ADC1_CH3`                           | **TP_INT**                               | Occupied               |
+
+---
+
+# M5Tough_FlowMeasurement
+
+M5Tough_FlowMeasurement to projekt wykorzystujący mikrokontroler M5Stack TOUGH ESP32 do pomiaru przepływu cieczy za pomocą jednego lub więcej czujników przepływu. Projekt wyświetla pomiary w czasie rzeczywistym na ekranie urządzenia, prezentując zarówno chwilowy, jak i uśredniony przepływ.
+
+## Opis
+
+Projekt M5Tough_FlowMeasurement służy do monitorowania przepływu cieczy z użyciem czujników przepływu podłączonych do mikrokontrolera M5Stack TOUGH ESP32. Projekt wyświetla prędkości przepływu w hercach (Hz) na ekranie urządzenia, wspierając jednoczesne monitorowanie maksymalnie dwóch czujników.
+
+Główne komponenty i funkcje:
+
+- **Dokładne zliczanie impulsów**: Wykorzystanie przerwań i timerów ESP32 zapewnia precyzyjne zliczanie impulsów z czujników przepływu.
+- **Uśrednione pomiary**: W celu redukcji szumów i wahań pomiary są uśredniane z ostatnich 10 próbek. W początkowej fazie średnia jest stopniowo wyliczana wraz z napływem nowych danych.
+- **Wyświetlacz czasu rzeczywistego**: Ekran pokazuje zarówno uśrednione, jak i chwilowe wartości przepływu dla każdego czujnika.
+- **Funkcja resetu**: Przycisk na ekranie umożliwia zresetowanie wszystkich liczników i pomiarów – przydatne podczas testów lub użytkowania.
+
+### Szczegóły techniczne
+
+- **Konfiguracja timera**: Timer ustawiony jest na rozdzielczość 100 milisekund (ms), zapewniając wysoką precyzję zliczania impulsów.
+- **Obsługa przerwań GPIO**: Obsługa przerwań testowana była do 100 kHz. Przy 101 kHz zauważono problemy z integralnością sygnału, co wskazuje na granice działania systemu.
+- **Obsługa wielu czujników**: System umożliwia jednoczesny pomiar z dwóch czujników, co sprawia, że nadaje się do różnych zastosowań wymagających monitorowania wielu przepływów.
+
+## Funkcje
+
+- **Monitorowanie w czasie rzeczywistym**: Obsługa do dwóch czujników jednocześnie.
+- **Dokładne pomiary**: Wykorzystanie przerwań i timerów ESP32 dla precyzyjnych wyników.
+- **Uśrednianie odczytów**: Średnia z 10 ostatnich pomiarów ogranicza zakłócenia i fluktuacje.
+- **Wyświetlacz**: Wizualna prezentacja przepływu w Hz dla każdego czujnika na ekranie M5Stack TOUGH.
+- **Przycisk resetu**: Reset wszystkich liczników za pomocą dotykowego przycisku na ekranie.
+
+## Wymagania sprzętowe
+
+Do uruchomienia projektu potrzebne będą:
+
+- **M5Stack TOUGH ESP32** – główny mikrokontroler przetwarzający dane i wyświetlający wyniki.
+- **Czujniki przepływu** – jeden lub więcej czujników z wyjściem impulsowym do pomiaru przepływu cieczy.
+- **Przewody połączeniowe** – do podłączenia czujników do pinów GPIO w M5Stack TOUGH.
+
+## Instalacja
+
+1. **Otwórz projekt w Arduino IDE**:
+
+   - Pobierz pliki projektu i otwórz główny szkic w Arduino IDE.
+
+2. **Zainstaluj wymagane biblioteki**:
+
+   - W Arduino IDE upewnij się, że masz zainstalowane:
+
+     - `M5Unified` – obsługa urządzeń M5Stack.
+     - `Arduino.h` (ESP32 core) – podstawowa biblioteka dla ESP32.
+
+3. **Skonfiguruj ustawienia płytki**:
+
+   - Wybierz odpowiednią płytkę (M5Stack TOUGH ESP32) i port COM w menu „Narzędzia”.
+
+4. **Wgraj kod**:
+
+   - Podłącz urządzenie M5Stack TOUGH ESP32 do komputera przez USB.
+   - Kliknij „Wgraj” w Arduino IDE, aby przesłać kod do urządzenia.
+
+## Użytkowanie
+
+1. **Podłącz czujniki przepływu**:
+
+   - Podłącz czujniki do odpowiednich pinów GPIO w M5Stack TOUGH.
+   - W razie potrzeby zaktualizuj numery pinów w pliku `FlowManager.cpp`, zmieniając linie 4 i 5:
+
+     ```cpp
+     #define SENSOR_PIN_1    2   // Zmień na pin podłączony do czujnika 1
+     #define SENSOR_PIN_2    36  // Zmień na pin podłączony do czujnika 2
+     ```
+
+2. **Włącz urządzenie**:
+
+   - Włącz M5Stack TOUGH i upewnij się, że czujniki są poprawnie podłączone.
+
+3. **Obserwuj pomiary przepływu**:
+
+   - Na ekranie pojawią się odczyty przepływu dla każdego czujnika w czasie rzeczywistym – zarówno uśrednione, jak i chwilowe wartości.
+
+4. **Zresetuj pomiary**:
+
+   - Skorzystaj z przycisku reset na ekranie, aby wyczyścić pomiary i rozpocząć nowe.
+
+## Przykładowy widok
+
+![Przykładowy widok](Example.jpeg)
+
+Na ilustracji widać prezentację pomiarów w czasie rzeczywistym – wartości uśrednione i chwilowe są czytelnie widoczne dla każdego podłączonego czujnika.
+
+## M5Stack Core2 (AWS) Tough – Rozkład pinów
+
+|   **GPIO**  | **Funkcje** |           **Używane przez**          |   **Dostępność**   |
+| :---------: | :---------: | :----------------------------------: | :----------------: |
+|  **GPIO 0** |  `ADC2_CH1` | M-Bus, **SPK_LRCK**, PDM_C (Core2)   | Częściowo dostępne |
+|  **GPIO 1** |   `USB_TX`  |           M-Bus, **Serial**          |       Zajęte       |
+|  **GPIO 2** |  `ADC2_CH2` |           M-Bus, **SPK_D**           |       Zajęte       |
+|  **GPIO 3** |   `USB_RX`  |           M-Bus, **Serial**          |       Zajęte       |
+|  **GPIO 4** |  `ADC2_CH0` |              **TF_CS**               | Częściowo dostępne |
+|  **GPIO 5** |             |              **LCD_CS**              |       Zajęte       |
+|  **GPIO 9** |             |                  ---                 |        Wolne       |
+| **GPIO 10** |             |                  ---                 |        Wolne       |
+| **GPIO 12** |  `ADC2_CH5` |             **SPK_BCLK**             | Częściowo dostępne |
+| **GPIO 13** |  `ADC2_CH4` |              M-Bus, RXD2             | Częściowo dostępne |
+| **GPIO 14** |  `ADC2_CH6` |              M-Bus, TXD2             | Częściowo dostępne |
+| **GPIO 15** |  `ADC2_CH3` |             **LCD\_D/C**             |       Zajęte       |
+| **GPIO 16** |   `PSRAM`   |                  ---                 |        Wolne       |
+| **GPIO 17** |   `PSRAM`   |                  ---                 |        Wolne       |
+| **GPIO 18** |             |             **SPI_SCLK**             |       Zajęte       |
+| **GPIO 19** |             |                 M-Bus                |       Zajęte       |
+| **GPIO 21** |             |             **I2C1_SDA**             |       Zajęte       |
+| **GPIO 22** |             |             **I2C1_SCL**             |       Zajęte       |
+| **GPIO 23** |             |             **SPI_MOSI**             |       Zajęte       |
+| **GPIO 25** |    `DAC1`   |       M-Bus, **RGB LED** (AWS)       |       Zajęte       |
+| **GPIO 26** |    `DAC2`   |                 M-Bus                | Częściowo dostępne |
+| **GPIO 27** |  `ADC2_CH7` |                 M-Bus                | Częściowo dostępne |
+| **GPIO 32** |  `ADC1_CH4` |      M-Bus, `PORT.A`, I2C0_SDA       |       Zajęte       |
+| **GPIO 33** |  `ADC1_CH5` |      M-Bus, `PORT.A`, I2C0_SCL       |       Zajęte       |
+| **GPIO 34** |  `ADC1_CH6` |       M-Bus, **PDM_D** (Core2)       |       Zajęte       |
+| **GPIO 35** |  `ADC1_CH7` |                 M-Bus                | Częściowo dostępne |
+| **GPIO 36** |  `ADC1_CH0` |                 M-Bus                | Częściowo dostępne |
+| **GPIO 37** |  `ADC1_CH1` |                  ---                 |        Wolne       |
+| **GPIO 38** |  `ADC1_CH2` |         M-Bus, **SPI_MISO**          |       Zajęte       |
+| **GPIO 39** |  `ADC1_CH3` |              **TP_INT**              |       Zajęte       |
