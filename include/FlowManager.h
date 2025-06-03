@@ -4,81 +4,72 @@
 #include <Arduino.h>
 #include "FlowSensor.h"
 
-/*
- * @brief     Klasa do zarzadzania wieloma czujnikami przeplywu i obslugi czasu.
- * @details   Odpowiada za inicjalizacje czujnikow, konfiguracje timera,
- *            przetwarzanie pomiarow oraz resetowanie stanu ukladu.
+/**
+ * Klasa do zarzadzania wieloma czujnikami przeplywu i obslugi czasu.
+ * Odpowiada za inicjalizacje czujnikow, konfiguracje timera,
+ * przetwarzanie pomiarow oraz resetowanie stanu ukladu
  */
 class FlowManager {
   public:
-    /*
-     * @brief   Constructor for FlowManager.
-     */
     FlowManager(void);
-
-    /*
-     * @brief   Destructor for FlowManager.
-     */
     ~FlowManager(void);
 
-    /*
-     * @brief   Sets up the timer for periodic measurements.
+    /**
+     * Ustawia timer do okresowych pomiarow
      */
     void setupTimer(void);
 
-    /*
-     * @brief   Initializes the flow sensors.
+    /**
+     * Inicjalizuje czujniki przeplywu
      */
     void setupFlowSensors(void);
 
-    /*
-     * @brief   Processes the measurements from the flow sensors.
+    /**
+     * Przetwarza dane z czujnikow przeplywu
      */
     void measurementsProcessing(void);
 
-    /*
-     * @brief   Resets all flow sensors and internal state.
+    /**
+     * Resetuje wszystkie czujniki przeplywu i stan wewnetrzny
      */
     void reset(void);
 
-    /*
-     * @brief   Gets the pointer to a flow sensor by index.
-     * @param   index   The index of the sensor.
-     * @retval  Pointer to the FlowSensor object at the specified index.
+    /**
+     * Zwraca wskaznik do czujnika przeplywu na podstawie indeksu
+     * @param   index   Indeks czujnika
+     * @retval  Wskaznik do obiektu FlowSensor
      */
     FlowSensor* getSensor(size_t index) const;
 
-    /*
-     * @brief   Gets the number of flow sensors.
-     * @retval  Number of flow sensors.
+    /**
+     * Zwraca liczbe czujnikow przeplywu
      */
     size_t getNumSensors(void) const;
 
-    /*
-     * @brief   Gets the current time count.
-     * @retval  Current time count.
+    /**
+     * Zwraca aktualna wartosc licznika czasu
      */
     int getTimeCount(void) const;
 
-    volatile bool measurementFlag;  // Flag indicating if measurements should be processed
+    volatile bool measurementFlag;  ///< Flaga oznaczajaca czy pomiary maja byc przetwarzane
 
   private:
-    /*
-     * @brief   Timer interrupt service routine.
+    /**
+     * Funkcja obslugi przerwania timera.
      */
     static void IRAM_ATTR onTimer(void);
 
-    portMUX_TYPE interruptManagerMux = portMUX_INITIALIZER_UNLOCKED;  // Critical section for timer interrupt protection
+    portMUX_TYPE interruptManagerMux = portMUX_INITIALIZER_UNLOCKED;  ///< Sekcja krytyczna do ochrony przerwan timera
 
-    hw_timer_t *timer;        // Timer object
-    volatile int timeCount;   // Time count for measurement intervals
+    hw_timer_t *timer;        ///< Obiekt timera
+    volatile int timeCount;   ///< Licznik czasu dla pomiarow
 
-    static FlowManager* instance;  // Static instance pointer for interrupt handling
+    static FlowManager* instance;     ///< Statyczny wskaznik instancji do obslugi przerwan
 
-    FlowSensor** sensors;   // Array of flow sensor pointers
-    size_t numSensors;      // Number of flow sensors
+    FlowSensor** sensors;     ///< Tablica wskaznikow na czujniki przeplywu
+    size_t numSensors;        ///< Liczba czujnikow
 
-    volatile bool firstMeasurement;  // Flag indicating the first measurement sequence
+    volatile bool firstMeasurement;  ///< Flaga oznaczajaca pierwszy pomiar
 };
 
 #endif // FLOWMANAGER_H
