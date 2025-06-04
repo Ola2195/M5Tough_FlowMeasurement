@@ -2,8 +2,7 @@
 #define FLOWSENSOR_H
 
 #include <Arduino.h>
-
-#define SAMPLE_SIZE  10   ///< Liczba probek do sredniowania
+#include "Config.h"
 
 /**
  * Klasa reprezentujaca czujnik przeplywu
@@ -68,14 +67,30 @@ class FlowSensor {
     float getAvgFrequency(void) const;
 
     /**
-     * Zwraca laczna liczbe impulsow.
+     * Zwraca laczna liczbe impulsow
      */
     int getPulseCount(void) const;
+ 
+    /**
+     * Zwraca calkowita liczbe impulsow od uruchomienia lub ostatniego resetu.
+     */
+    int getTotalPulseCount(void) const;
+
+    /*
+     * Zwraca objetosc w litrach od ostatniego resetu
+     */
+    float getTotalLiters(void) const;
+
+    /*
+     * Zwraca szybkosc przeplywu w l/min
+     */
+    float getFlowRateLPM(void) const;
 
   private:
     int pin_;                     ///< Pin podlaczony do czujnika przeplywu
     volatile int pulseCount;      ///< Licznik impulsow
     volatile int lastPulseCount;  ///< Ostatnia liczba impulsow (do obliczen)
+    volatile int totalPulseCount; ///< Liczenia calkowitej objetosci
     volatile float frequency;     ///< Chwilowa czestotliwosc
 
     float samples[SAMPLE_SIZE];   ///< Tablica probek do sredniowania

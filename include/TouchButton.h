@@ -2,6 +2,7 @@
 #define TOUCHBUTTON_H
 
 #include <Arduino.h>
+#include <M5Unified.h>
 
 /**
  * Klasa reprezentujaca przycisk dotykowy

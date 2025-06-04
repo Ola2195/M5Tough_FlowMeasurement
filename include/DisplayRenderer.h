@@ -20,8 +20,9 @@ class DisplayRenderer {
      * Wyswietla czestotliwosci (chwilowa i srednia) na ekranie
      * @param   frequency      Czestotliwosc chwilowa (Hz)
      * @param   avgFrequency   Srednia czestotliwosc (Hz)
+     * @param   rateLPM        Przeplyw przeliczony na litry na minute [L/min]
      */
-    void renderMeasurements(float frequency, float avgFrequency);
+    void renderMeasurements(float frequency, float avgFrequency, float rateLPM);
 
     /*
      * Wyswietla szczegolowe dane czujnika przeplywu.
@@ -30,6 +31,16 @@ class DisplayRenderer {
      * @param   pulseCount   Liczba impulsow z czujnika
      */
     void renderSensorDetails(int sensorId, int timeCount, int pulseCount);
+
+    /*
+     * Wyswietla szczegolowe dane czujnika przeplywu.
+     * @param   sensorId     Numer czujnika (indeks)
+     * @param   timeCount    Liczba odczytow czasu (w setkach ms)
+     * @param   totalPulse   Calkowita liczba impulsow od uruchomienia/resetu
+     * @param   totalLiters  Calkowita objetosc przeplywu przeliczona na litry
+     * @param   rateLPM      Przeplyw przeliczony na litry na minute [L/min]
+     */
+    void renderSensorDetails(int sensorId, float frequency, float avgFrequency, int totalPulse, float totalLiters, float rateLPM);
 
     /*
      * Rysuje pozioma linie oddzielajaca w danym miejscu

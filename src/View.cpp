@@ -18,14 +18,15 @@ void MainMeasurementView::render() {
   M5.Lcd.setTextColor(WHITE, BLACK);
   M5.Lcd.setTextSize(2);
 
+  size_t i = 1;
   for (size_t i = 0; i < _manager.getNumSensors(); ++i) {
     FlowSensor* sensor = _manager.getSensor(i);
     if (sensor) {
-      _renderer.renderMeasurements(sensor->getInstantFrequency(), sensor->getAvgFrequency());
+      _renderer.renderMeasurements(sensor->getInstantFrequency(), sensor->getAvgFrequency(), sensor->getFlowRateLPM());
     }
   }
 
-  _renderer.drawDividingLine(_renderer.getDisplayHeight() / 3 - 10);
+  _renderer.drawDividingLine(_renderer.getDisplayHeight() / 3);
 }
 
 void MainMeasurementView::update() {
@@ -34,4 +35,23 @@ void MainMeasurementView::update() {
     _manager.reset();
     _renderer.clearRegion(0, _resetButton.getY());
   } 
+}
+
+SensorDetailView::SensorDetailView(FlowSensor* sensor, int sensorId)
+  : _sensor(sensor), _sensorId(sensorId) {}
+
+void SensorDetailView::setup() {
+  M5.Lcd.fillScreen(BLACK);
+}
+
+void SensorDetailView::render() {
+  M5.Lcd.setCursor(0, 0);
+  M5.Lcd.setTextColor(WHITE, BLACK);
+  M5.Lcd.setTextSize(2);
+  
+  _renderer.renderSensorDetails(_sensorId, _sensor->getInstantFrequency(), _sensor->getAvgFrequency(), _sensor->getTotalPulseCount(), _sensor->getTotalLiters(), _sensor->getFlowRateLPM());
+}
+
+void SensorDetailView::update() {
+  _ui.update();
 }

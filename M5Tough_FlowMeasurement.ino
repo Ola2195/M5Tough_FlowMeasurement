@@ -6,6 +6,7 @@
 
 FlowManager manager;
 MainMeasurementView* mainView;
+//SensorDetailView* secoundSensorView;
 
 /*
  * Initial setup
@@ -19,6 +20,7 @@ void setup() {
 
   mainView = new MainMeasurementView(manager);
   mainView->setup();
+  //secoundSensorView = new SensorDetailView(manager.getSensor(1), 1);
 }
 
 /*
@@ -29,6 +31,8 @@ void loop() {
     manager.measurementsProcessing();  // Process measurements if the flag is set
   }
 
+  //secoundSensorView->render();
+  //secoundSensorView->update();
   mainView->render();
   mainView->update();
 }

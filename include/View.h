@@ -58,4 +58,20 @@ class MainMeasurementView : public BaseView {
     TouchUI _ui;                ///< Interfejs obslugi dotyku
 };
 
+class SensorDetailView : public BaseView {
+  public:
+    SensorDetailView(FlowSensor* sensor, int sensorId);
+
+    void setup() override;
+    void render() override;
+    void update() override;
+
+  private:
+    FlowSensor* _sensor;
+    int _sensorId;
+
+    DisplayRenderer _renderer;  ///< Klasa renderujaca dane na ekran
+    TouchUI _ui;                ///< Interfejs obslugi dotyku
+};
+
 #endif // VIEW_H

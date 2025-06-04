@@ -1,8 +1,5 @@
 #include "include/FlowManager.h"
-
-#define NUM_SENSORS 2    // Number of flow sensors
-#define SENSOR_PIN_1 2   // Pin for the first sensor
-#define SENSOR_PIN_2 36  // Pin for the second sensor
+#include "Config.h"
 
 // Initialize the static instance pointer
 FlowManager* FlowManager::instance = nullptr;

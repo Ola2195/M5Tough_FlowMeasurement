@@ -4,7 +4,7 @@
 FlowSensor* FlowSensor::instance = nullptr;
 
 FlowSensor::FlowSensor(int pin)
-  : pin_(pin), pulseCount(0), lastPulseCount(0),
+  : pin_(pin), pulseCount(0), lastPulseCount(0), totalPulseCount(0),
     frequency(0.0), sampleIndex(0), avgFrequency(0),
     firstSequence(true) {
   instance = this;  // Set the static instance pointer to this instance
@@ -58,6 +58,7 @@ void FlowSensor::setAvgFrequency(void) {
 void FlowSensor::reset(void) {
   pulseCount = 0;
   lastPulseCount = 0;
+  totalPulseCount = 0;
   frequency = 0.0;
   memset(samples, 0, sizeof(samples));
   sampleIndex = 0;
@@ -77,10 +78,25 @@ int FlowSensor::getPulseCount(void) const {
   return pulseCount;
 }
 
+int FlowSensor::getTotalPulseCount(void) const {
+  return totalPulseCount;
+}
+
+
+float FlowSensor::getTotalLiters(void) const {
+  return static_cast<float>(totalPulseCount) / PULSES_PER_LITER;
+}
+
+float FlowSensor::getFlowRateLPM(void) const {
+  // Zakladamy, ze `frequency` to impulsy/sekunde
+  return (avgFrequency / PULSES_PER_LITER) * 60.0f;
+}
+
 void IRAM_ATTR FlowSensor::pulseCounter() {
   if (instance) {                                     // Check if the instance pointer is valid
     portENTER_CRITICAL_ISR(&instance->interruptMux);  // Enter critical section to protect shared variables
     instance->pulseCount++;
+    instance->totalPulseCount++;
     portEXIT_CRITICAL_ISR(&instance->interruptMux);
   }
 }
